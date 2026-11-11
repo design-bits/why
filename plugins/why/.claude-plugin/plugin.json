@@ -1,0 +1,35 @@
+{
+  "name": "why",
+  "version": "0.1.0",
+  "description": "A reason for every change: who needs the work before you build it, a receipt on the PR, and how it landed after you ship. Backed by your Design Bits research.",
+  "author": {
+    "name": "Design Bits",
+    "url": "https://designbits.app"
+  },
+  "homepage": "https://designbits.app",
+  "repository": "https://github.com/design-bits/why",
+  "license": "MIT",
+  "keywords": [
+    "research",
+    "product",
+    "receipts",
+    "evidence",
+    "design"
+  ],
+  "userConfig": {
+    "project": {
+      "type": "string",
+      "title": "Design Bits project",
+      "description": "The id or title of the Design Bits project this repo builds. Leave it empty if your connection reaches one project.",
+      "required": false
+    },
+    "base_url": {
+      "type": "string",
+      "title": "Design Bits address",
+      "description": "Where Design Bits runs. Change it only to test against your own copy.",
+      "default": "https://designbits.app",
+      "required": false
+    }
+  },
+  "types": "./types/index.d.ts"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "designbits",
+  "description": "Design Bits for Claude Code: a reason for every change, from your research to your pull requests.",
+  "owner": {
+    "name": "Design Bits",
+    "url": "https://designbits.app"
+  },
+  "plugins": [
+    {
+      "name": "why",
+      "source": "./plugins/why",
+      "description": "A reason for every change: preflight before you build, a receipt on the PR, a landing report after you ship, and persona reviews grounded in your research."
+    }
+  ]
+}

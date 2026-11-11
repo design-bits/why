@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+// Silences Why's session-start note on this machine (why-quiet), or turns it back on (why-quiet off).
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+
+const dir = process.env.WHY_STATE_DIR || join(homedir(), '.claude', 'why'), flag = join(dir, 'quiet');
+if (process.argv[2] === 'off') {
+  rmSync(flag, { force: true });
+  process.stdout.write('Why will brief you again at the start of each session.\n');
+} else {
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(flag, new Date().toISOString());
+  process.stdout.write(`Why is quiet: no note at session start${existsSync(flag) ? '' : ''}. Run why-quiet off to hear from it again. Receipts on PRs still work when you ask for them.\n`);
+}

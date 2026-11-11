@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+// How costly the work on this branch would be to undo, read from the diff on this machine. Prints JSON:
+//   { "cost": "low"|"high", "reasons": ["billing", …], "verdict": "Ship it and watch." }
+// Only `cost` and `reasons` go to Design Bits. Paths are printed only with --paths, for you, and never sent.
+//   why-undo [--base=origin/main] [--paths]
+import { execFileSync } from 'node:child_process';
+import { readNumstat, undoCost, verdictOf } from '../lib/undoCost.mjs';
+
+const arg = name => process.argv.find(a => a.startsWith(`--${name}=`))?.split('=')[1];
+const git = (...args) => { try { return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return null; } };
+const base = arg('base') || ['origin/main', 'main', 'origin/master', 'master'].find(b => git('rev-parse', '--verify', '--quiet', b) !== null) || 'HEAD';
+const range = `${base}...HEAD`;
+const stat = readNumstat(git('diff', '--numstat', range) || '');
+// work not committed yet counts too
+const local = readNumstat(git('diff', '--numstat', 'HEAD') || '');
+const deleted = [git('diff', '--name-only', '--diff-filter=D', range), git('diff', '--name-only', '--diff-filter=D', 'HEAD')].join('\n').split('\n').map(s => s.trim()).filter(Boolean);
+const u = undoCost({ paths: [...new Set([...stat.paths, ...local.paths])], deleted, added: stat.added + local.added, removed: stat.removed + local.removed });
+const out = { cost: u.cost, reasons: u.reasons.map(r => r.id), verdict: verdictOf(u).title, base };
+if (process.argv.includes('--paths')) out.paths = Object.fromEntries(u.reasons.map(r => [r.id, r.paths]));
+process.stdout.write(`${JSON.stringify(out, null, 1)}\n`);

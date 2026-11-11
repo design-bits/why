@@ -1,0 +1,22 @@
+{
+  "description": "One short note at session start: the branch and ticket you are on, so Claude briefs itself with preflight before building. Reads local git only; sends nothing anywhere.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/session.mjs"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "modules": [
+    "./board.tsx"
+  ]
+}
