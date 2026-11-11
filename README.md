@@ -47,7 +47,7 @@ Also:
 
 ## Settings
 
-Claude Code asks for these when you install:
+Both are optional. Set them with `/plugin configure why@designbits`:
 
 - `project`: the Design Bits project this repo builds. Leave it empty if your sign-in reaches only one project.
 - `base_url`: where Design Bits runs. The default is `https://designbits.app`.
