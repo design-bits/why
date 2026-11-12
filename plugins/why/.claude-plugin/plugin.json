@@ -1,7 +1,7 @@
 {
   "name": "why",
-  "version": "0.1.0",
-  "description": "A reason for every change: who needs the work before you build it, a receipt on the PR, and how it landed after you ship. Backed by your Design Bits research.",
+  "version": "1.0.0",
+  "description": "A brief before you build: the approved needs in your Design Bits workspace that a piece of work serves, in 10 lines or fewer, and nothing when none match. The PR note comes from the Design Bits GitHub Action.",
   "author": {
     "name": "Design Bits",
     "url": "https://designbits.app"
@@ -12,15 +12,15 @@
   "keywords": [
     "research",
     "product",
-    "receipts",
+    "needs",
     "evidence",
     "design"
   ],
   "userConfig": {
     "project": {
       "type": "string",
-      "title": "Design Bits project",
-      "description": "The id or title of the Design Bits project this repo builds. Leave it empty if your connection reaches one project.",
+      "title": "Design Bits workspace",
+      "description": "The id or title of the Design Bits workspace this repo builds. Leave it empty: the brief finds the workspace that links this repo.",
       "required": false
     },
     "base_url": {
@@ -30,6 +30,5 @@
       "default": "https://designbits.app",
       "required": false
     }
-  },
-  "types": "./types/index.d.ts"
+  }
 }

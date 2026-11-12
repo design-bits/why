@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+// Which file paths may leave this machine. Pipe paths in, one per line, and it prints as JSON only those the project's lists
+// allow: never secrets, .env files or keys, whatever the lists say. The path_rules tool gives the lists as this command:
+//   git diff --name-only origin/main...HEAD | why-paths --deny='infra/**'
+// With --branch instead of a pipe, it reads the branch's changed files itself (against --base, origin/main by default).
+// Send only what it prints; the server applies the same rules again to whatever arrives.
+// It also keeps the lists it was given for this repo (lib/repoRules.mjs), so hooks/paths.mjs applies them to record_change. A
+// bare why-paths (the owner emptied the lists) keeps the older ones, so the hook stays stricter until the next run with lists.
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { allowedPaths } from '../lib/pathRules.mjs';
+import { keepRules } from '../lib/repoRules.mjs';
+
+const arg = name => process.argv.find(a => a.startsWith(`--${name}=`))?.slice(name.length + 3);
+const list = name => (arg(name) || '').replace(/^'|'$/g, '').split(',').map(s => s.trim()).filter(Boolean);
+const git = (...args) => { try { return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return ''; } };
+const base = () => arg('base') || ['origin/main', 'main', 'origin/master', 'master'].find(b => git('rev-parse', '--verify', '--quiet', b)) || 'HEAD';
+
+const input = process.argv.includes('--branch') || arg('base')
+  ? `${git('diff', '--name-only', `${base()}...HEAD`)}\n${git('diff', '--name-only', 'HEAD')}`
+  : (() => { try { return readFileSync(0, 'utf8'); } catch { return ''; } })();
+const all = [...new Set(input.split('\n').map(s => s.trim()).filter(Boolean))];
+const kept = allowedPaths(all, { allow: list('allow'), deny: list('deny') });
+if (arg('allow') !== undefined || arg('deny') !== undefined) keepRules(process.cwd(), { allow: list('allow'), deny: list('deny') });
+process.stdout.write(`${JSON.stringify(kept)}\n`);
+if (all.length > kept.length) process.stderr.write(`${all.length - kept.length} path(s) stay on this machine.\n`);

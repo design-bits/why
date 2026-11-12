@@ -11,5 +11,5 @@ if (process.argv[2] === 'off') {
 } else {
   mkdirSync(dir, { recursive: true });
   writeFileSync(flag, new Date().toISOString());
-  process.stdout.write(`Why is quiet: no note at session start${existsSync(flag) ? '' : ''}. Run why-quiet off to hear from it again. Receipts on PRs still work when you ask for them.\n`);
+  process.stdout.write(`Why is quiet: no note at session start${existsSync(flag) ? '' : ''}. Run why-quiet off to hear from it again. PR notes still work when you ask for them.\n`);
 }

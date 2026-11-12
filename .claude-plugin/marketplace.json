@@ -1,6 +1,6 @@
 {
   "name": "designbits",
-  "description": "Design Bits for Claude Code: a reason for every change, from your research to your pull requests.",
+  "description": "Design Bits for Claude Code: a brief of the customer needs a piece of work serves, before you build it.",
   "owner": {
     "name": "Design Bits",
     "url": "https://designbits.app"
@@ -9,7 +9,7 @@
     {
       "name": "why",
       "source": "./plugins/why",
-      "description": "A reason for every change: preflight before you build, a receipt on the PR, a landing report after you ship, and persona reviews grounded in your research."
+      "description": "A brief before you build: the approved needs in your Design Bits workspace that a piece of work serves, in 10 lines or fewer. The PR note comes from the Design Bits GitHub Action."
     }
   ]
 }

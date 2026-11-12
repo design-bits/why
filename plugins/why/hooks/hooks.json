@@ -1,5 +1,5 @@
 {
-  "description": "One short note at session start: the branch and ticket you are on, so Claude briefs itself with preflight before building. Reads local git only; sends nothing anywhere.",
+  "description": "One short note at session start: a reminder to use the brief skill before building a ticket, only in repos linked to Design Bits. Before record_change, a second hook tries to drop file paths this repo's lists leave out; it isn't yet confirmed to run in every Claude Code version, so why-paths and the server's check still do the work. Reads local git and Why's state folder only; sends nothing anywhere.",
   "hooks": {
     "SessionStart": [
       {
@@ -14,9 +14,21 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__plugin_why_designbits__record_change",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/paths.mjs"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
     ]
-  },
-  "modules": [
-    "./board.tsx"
-  ]
+  }
 }

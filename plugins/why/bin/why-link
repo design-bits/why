@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+// Turns Why's note at session start on for this repo (why-link), or off again (why-link off). The note also speaks
+// in any repo that holds the needs workflow, so this is the fallback for a repo without it. It changes one
+// file in Why's state folder and sends nothing anywhere.
+import { setLinked } from '../lib/link.mjs';
+
+const off = process.argv[2] === 'off', repo = setLinked(process.cwd(), !off);
+process.stdout.write(!repo ? 'This folder is not a git repository, so there is nothing to link.\n'
+  : off ? `Why won’t brief you at session start in ${repo} any more.\n` : `Why will brief you at the start of sessions in ${repo}.\n`);
